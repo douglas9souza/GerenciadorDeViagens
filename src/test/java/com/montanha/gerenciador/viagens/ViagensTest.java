@@ -19,6 +19,9 @@ public class ViagensTest extends Base {
     String tokenUser = new Login().authenticationUser();
     DadosViagens dadosViagens = new DadosViagens();
 
+    String idGerado = dadosViagens.gerarId();
+    String idExcluido = idGerado;
+
     @Test
     public void testCadastrarViagemComSucesso() {
 
@@ -38,7 +41,9 @@ public class ViagensTest extends Base {
 //                .body("data.localDeDestino", containsString("Salvador"))
 //                .body("data.dataPartida", containsString("2022-01-02"))
 //                .body("data.dataRetorno", containsString("2022-01-11"))
-                .statusCode(HttpStatus.SC_CREATED);
+                .statusCode(HttpStatus.SC_CREATED)
+                .body("data", is(notNullValue()))
+                .body("data.id[0]", greaterThan(0));
     }
 
     @Test
@@ -63,8 +68,6 @@ public class ViagensTest extends Base {
     @Test
     public void testAtualizarDadosDeViagemCadastrada() {
 
-        String idEditar = dadosViagens.gerarId();
-
         Map dadosEditados = dadosViagens.dadosParaEditarViagens();
 
         given()
@@ -72,7 +75,7 @@ public class ViagensTest extends Base {
                 .body(dadosEditados)
                 .contentType(ContentType.JSON)
                 .when()
-                .put(buildUrl("/v1/viagens/" + idEditar))
+                .put(buildUrl("/v1/viagens/" + idGerado))
                 .then()
                 .log().all()
                 .assertThat()
@@ -81,15 +84,31 @@ public class ViagensTest extends Base {
 
     @Test
     public void testDeletarViagemCadastrada() {
-        String idExcluir = dadosViagens.gerarId();
 
         given()
                 .header("Authorization", tokenAdmin)
                 .when()
-                .delete(buildUrl("/v1/viagens/" + idExcluir))
+                .delete(buildUrl("/v1/viagens/" + idGerado))
                 .then()
                 .log().all()
                 .assertThat()
                 .statusCode(HttpStatus.SC_NO_CONTENT);
+
+        testValidarViagemDeletada();
+
+    }
+
+    @Test
+    public void testValidarViagemDeletada(){
+        given()
+                .header("Authorization", tokenUser)
+                .when()
+                .get(buildUrl("/v1/viagens/" + idExcluido))
+                .then()
+                .log().all()
+                .assertThat()
+                .statusCode(HttpStatus.SC_NOT_FOUND);
+
     }
 }
+

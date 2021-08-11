@@ -12,7 +12,7 @@ public class GeradorDeDadosRandomicos {
     }
 
     public String gerarLocalDeDestino() {
-        String[] listaLocais = {"Porto Alegre", "Salvador", "Porto Seguro", "Gramado", "Rio de Janeiro",};
+        String[] listaLocais = {"Porto Alegre", "Salvador", "Porto Seguro", "Gramado", "Rio de Janeiro"};
 
         return listaLocais[dadoRandomico.nextInt(listaLocais.length)];
     }
