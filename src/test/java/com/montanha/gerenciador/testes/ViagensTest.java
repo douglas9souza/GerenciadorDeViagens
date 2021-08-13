@@ -22,7 +22,7 @@ public class ViagensTest extends Base {
     String idExcluido;
 
     @Test
-    public void testCadastrarViagemComSucesso() {
+    public void testeCadastrarViagemComSucesso() {
 
         Map dados = dadosViagens.dadosParaCadastroDeViagens();
 
@@ -35,18 +35,13 @@ public class ViagensTest extends Base {
                 .then()
                 .log().all()
                 .assertThat()
-//                .body("data.acompanhante", containsString("Douglas"))
-//                .body("data.regiao", containsString("Nordeste"))
-//                .body("data.localDeDestino", containsString("Salvador"))
-//                .body("data.dataPartida", containsString("2022-01-02"))
-//                .body("data.dataRetorno", containsString("2022-01-11"))
                 .statusCode(HttpStatus.SC_CREATED)
                 .body("data", is(notNullValue()))
                 .body("data.id[0]", greaterThan(0));
     }
 
     @Test
-    public void testObterViagensCadastradas() {
+    public void testeObterViagensCadastradas() {
         given()
                 .header("Authorization", tokenUser)
                 .when()
@@ -54,18 +49,11 @@ public class ViagensTest extends Base {
                 .then()
                 .log().all()
                 .assertThat()
-                .statusCode(HttpStatus.SC_OK)
-//                .body(
-//                "data.id[0]", equalTo(1),
-//                "data.acompanhante[0]", equalTo("Douglas"),
-//                "data.regiao[0]", equalTo("Nordeste"),
-//                "data.localDeDestino[0]", equalTo("Salvador")
-//                )
-        ;
+                .statusCode(HttpStatus.SC_OK);
     }
 
     @Test
-    public void testAtualizarDadosDeViagemCadastrada() {
+    public void testeAtualizarDadosDeViagemCadastrada() {
 
         Map dadosEditados = dadosViagens.dadosParaEditarViagens();
 
@@ -82,7 +70,7 @@ public class ViagensTest extends Base {
     }
 
     @Test
-    public void testDeletarViagemCadastrada() {
+    public void testeDeletarViagemCadastrada() {
 
         given()
                 .header("Authorization", tokenAdmin)
@@ -95,12 +83,12 @@ public class ViagensTest extends Base {
 
         idExcluido = idGerado;
 
-        testValidarViagemDeletada();
+        testeValidarViagemDeletada();
 
     }
 
     @Test
-    public void testValidarViagemDeletada(){
+    public void testeValidarViagemDeletada(){
         given()
                 .header("Authorization", tokenUser)
                 .when()
@@ -109,7 +97,6 @@ public class ViagensTest extends Base {
                 .log().all()
                 .assertThat()
                 .statusCode(HttpStatus.SC_NOT_FOUND);
-
     }
 }
 

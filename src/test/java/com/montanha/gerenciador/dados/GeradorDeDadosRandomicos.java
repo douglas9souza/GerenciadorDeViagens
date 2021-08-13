@@ -18,7 +18,7 @@ public class GeradorDeDadosRandomicos {
     }
 
     public String gerarRegiao() {
-        String[] listaRegioes = {"Sul", "Norte", "Leste", "Oeste", "Nordeste"};
+        String[] listaRegioes = {"Sul", "Norte", "Leste", "Oeste"};
 
         return listaRegioes[dadoRandomico.nextInt(listaRegioes.length)];
     }
